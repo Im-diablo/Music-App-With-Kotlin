@@ -19,7 +19,7 @@
     *   Interactive notification controls with click-to-navigate support - tap the notification to jump directly to the currently playing song.
 *   **❤️ Favorites System**: Easily mark songs as favorites to build your go-to playlist.
 *   **⏱ Sleep Timer**: Fall asleep to your music without worry; set a timer to automatically stop playback.
-*   **🔍 Search**: Quickly find your favorite tracks with an integrated search bar.
+*   **🔍 Search**: Integrated search bar to quickly find and play specific tracks from your library.
 *   **📲 Share**: Share your favorite tracks with friends directly from the app.
 
 ---

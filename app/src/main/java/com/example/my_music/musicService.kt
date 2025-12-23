@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.example.my_music.PlayerActivity.Companion.binding
 import com.example.my_music.PlayerActivity.Companion.musicListPA
 import com.example.my_music.PlayerActivity.Companion.musicService
+import com.example.my_music.PlayerActivity.Companion.nowPlayingId
 import com.example.my_music.PlayerActivity.Companion.songPosition
 
 class MusicService: Service() {
@@ -96,6 +97,7 @@ class MusicService: Service() {
             binding.seekbarEndTV.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
             binding.seekBarPA.progress = 0
             binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
+            nowPlayingId = musicListPA[songPosition].id
         }catch (e: Exception){return}
     }
 

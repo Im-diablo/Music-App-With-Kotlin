@@ -35,6 +35,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var min15: Boolean = false
         var min30: Boolean = false
         var min60: Boolean = false
+        var nowPlayingId: String = ""
     }
 
 
@@ -150,6 +151,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.seekBarPA.progress = 0
             binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
+            nowPlayingId = musicListPA[songPosition].id
         } catch (e: Exception) {
             return
         }
@@ -164,6 +166,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 binding.seekbarEndTV.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
                 binding.seekBarPA.progress = musicService!!.mediaPlayer!!.currentPosition
                 binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
+                if(isPlaying) binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
+                else binding.playPauseBtn.setImageResource(R.drawable.play_ic)
             }
             "MusicAdapterSearch" -> {
                 // for starting service
@@ -264,7 +268,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             Toast.makeText(this, "Music Will Stop After 15 Minutes", Toast.LENGTH_SHORT).show()
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.cool_pink))
             min5s = true
-            Thread{ Thread.sleep(900000)
+            Thread{ Thread.sleep((15*60000).toLong())
                 if(min15) exitApplication()}.start()
             dialog.dismiss()
         }
@@ -272,7 +276,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             Toast.makeText(this, "Music Will Stop After 30 Minutes", Toast.LENGTH_SHORT).show()
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.cool_pink))
             min5s = true
-            Thread{ Thread.sleep(1800000)
+            Thread{ Thread.sleep((30*60000).toLong())
                 if(min30) exitApplication()}.start()
             dialog.dismiss()
         }
@@ -280,7 +284,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             Toast.makeText(this, "Music Will Stop After 60 Minutes", Toast.LENGTH_SHORT).show()
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.cool_pink))
             min5s = true
-            Thread{ Thread.sleep(3600000)
+            Thread{ Thread.sleep((60*60000).toLong())
                 if(min60) exitApplication()}.start()
             dialog.dismiss()
         }
