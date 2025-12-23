@@ -38,12 +38,17 @@ class NotificationReceiver: BroadcastReceiver() {
 
     private fun PrevNextSong(increment: Boolean, context: Context) {
         setSongPosition(increment= increment)
-        PlayerActivity.musicService!!.createdMediaPlayer()
+        PlayerActivity.musicService!!.createMediaPlayer()
         Glide.with(context)
             .load(musicListPA[songPosition].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
             .into(binding.songImagePA)
         binding.currentSongPA.text = musicListPA[songPosition].title
+        Glide.with(context)
+            .load(musicListPA[songPosition].artUri)
+            .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
+            .into(NowPlaying.Companion.binding.songImageNP)
+        NowPlaying.binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
         playMusic()
 
     }

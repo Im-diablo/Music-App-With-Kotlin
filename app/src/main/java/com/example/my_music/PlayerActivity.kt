@@ -44,26 +44,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        // Set status bar color and handle window insets
         window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-        
-        // Apply padding to root layout for status bar
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        
-        val intent = Intent(this, MusicService::class.java)
-        bindService(intent, this, BIND_AUTO_CREATE)
-        // for starting service
-        startService(intent)
         initializeLayout()
-        binding.playPauseBtn.setOnClickListener {
-            if (isPlaying) pauseMusic()
-            else playMusic()
-        }
+        binding.playPauseBtn.setOnClickListener {if (isPlaying) pauseMusic() else playMusic()}
         binding.prevBtn.setOnClickListener { prevNextSong(increment = false) }
         binding.nextBtn.setOnClickListener { prevNextSong(increment = true) }
         binding.backBtn.setOnClickListener { finish() }
@@ -147,7 +135,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         if(min5s || min15 || min30 || min60) binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.cool_pink))
     }
 
-    private fun createdMediaPlayer() {
+    private fun createMediaPlayer() {
         try {
             if (musicService!!.mediaPlayer == null) musicService!!.mediaPlayer = MediaPlayer()
             else musicService!!.mediaPlayer!!.reset()
@@ -170,18 +158,37 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     private fun initializeLayout() {
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
+            "NowPlaying" -> {
+                setLayout()
+                binding.seekbarStartTV.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+                binding.seekbarEndTV.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+                binding.seekBarPA.progress = musicService!!.mediaPlayer!!.currentPosition
+                binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
+            }
             "MusicAdapterSearch" -> {
+                // for starting service
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListSearch)
                 setLayout()
             }
             "MusicAdapter" -> {
+                // for starting service
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListMA)
                 setLayout()
             }
 
             "MainActivity" -> {
+                // for starting service
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListMA)
                 musicListPA.shuffle()
@@ -208,18 +215,18 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         if (increment) {
             setSongPosition(increment = true)
             setLayout()
-            createdMediaPlayer()
+            createMediaPlayer()
         } else {
             setSongPosition(increment = false)
             setLayout()
-            createdMediaPlayer()
+            createMediaPlayer()
         }
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
-        createdMediaPlayer()
+        createMediaPlayer()
         musicService!!.seekBarSetup()
     }
 
@@ -229,7 +236,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     override fun onCompletion(mp: MediaPlayer?) {
         setSongPosition(increment = true)
-        createdMediaPlayer()
+        createMediaPlayer()
         try {
             setLayout()
         }catch (e: Exception){return}

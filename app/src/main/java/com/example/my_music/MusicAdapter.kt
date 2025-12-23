@@ -54,6 +54,6 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         val intent = Intent(context, PlayerActivity::class.java)
         intent.putExtra("index", pos)
         intent.putExtra("class", ref)
-        context.startActivity(intent)
+        context.startActivity(intent ,null)
     }
 }

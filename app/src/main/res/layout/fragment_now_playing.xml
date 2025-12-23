@@ -48,7 +48,10 @@
         android:textStyle="bold"
         android:gravity="center"
         android:layout_toStartOf="@id/playPauseBtnNp"
-        android:layout_toEndOf="@id/songImageNP"/>
+        android:layout_toEndOf="@id/songImageNP"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"/>
 
 
 

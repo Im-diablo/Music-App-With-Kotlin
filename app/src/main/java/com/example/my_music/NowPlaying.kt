@@ -1,9 +1,11 @@
 package com.example.my_music
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -24,6 +26,24 @@ class NowPlaying : Fragment() {
         binding.playPauseBtnNp.setOnClickListener {
             if(PlayerActivity.isPlaying) pauseMusic() else playMusic()
         }
+        binding.nextBtnNp.setOnClickListener {
+            setSongPosition(increment= true)
+            PlayerActivity.musicService!!.createMediaPlayer()
+            PlayerActivity.Companion.binding.currentSongPA.text = musicListPA[songPosition].title
+            Glide.with(this)
+                .load(musicListPA[songPosition].artUri)
+                .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
+                .into(NowPlaying.Companion.binding.songImageNP)
+            binding.songNameNP.text = musicListPA[songPosition].title
+            PlayerActivity.musicService!!.showNotification(R.drawable.pause_ic)
+            playMusic()
+        }
+        binding.root.setOnClickListener {
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
+            intent.putExtra("index", PlayerActivity.songPosition)
+            intent.putExtra("class", "NowPlaying")
+            ContextCompat.startActivity(requireContext(), intent, null)
+        }
         return view
     }
 
@@ -31,6 +51,7 @@ class NowPlaying : Fragment() {
         super.onResume()
         if(PlayerActivity.musicService != null){
             binding.root.visibility = View.VISIBLE
+            binding.songNameNP.isSelected = true
             Glide.with(this)
                 .load(musicListPA[songPosition].artUri)
                 .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())

@@ -35,6 +35,9 @@ class MusicService: Service() {
     fun showNotification(PlayPauseBtn: Int){
 
         val intent = Intent(baseContext, PlayerActivity::class.java)
+        intent.putExtra("index", songPosition)
+        intent.putExtra("class", "NowPlaying")
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         val contentIntent = PendingIntent.getActivity(baseContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val prevIntent = Intent(baseContext, NotificationReceiver::class.java).setAction(applicationClass.PREVIOUS)
@@ -81,7 +84,7 @@ class MusicService: Service() {
         startForeground(13, notification)
     }
 
-    fun createdMediaPlayer() {
+    fun createMediaPlayer() {
         try {
             if (musicService!!.mediaPlayer == null) musicService!!.mediaPlayer = MediaPlayer()
             else musicService!!.mediaPlayer!!.reset()
