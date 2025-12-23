@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- DARK THEMES - For Android 10+ (API 29+) -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- 🌙 Dark Mode Theme - Sleek and modern dark interface -->
+    <style name="Theme.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Activity Colors -->
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryVariant">@color/dark_secondary</item>
+        <item name="colorSecondary">@color/dark_accent</item>
+        <item name="colorOnPrimary">@color/dark_text</item>
+        <item name="colorOnSecondary">@color/dark_text</item>
+        <item name="android:windowBackground">@color/dark_primary</item>
+        <item name="android:textColorPrimary">@color/dark_text</item>
+        <item name="android:textColorSecondary">@color/dark_text_secondary</item>
+        <!-- Navigation Drawer Colors -->
+        <item name="colorSurface">@color/dark_secondary</item>
+        <item name="colorOnSurface">@color/dark_text</item>
+    </style>
+
+</resources>

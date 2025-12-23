@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- BASE THEMES - Core app themes -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <style name="Theme.My_Music" parent="Theme.MaterialComponents.Light.NoActionBar" />
+    <style name="Theme.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- LIGHT THEMES - Custom color schemes for activities -->
+    <!-- Each theme includes Navigation Drawer theming -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- 🌊 Ocean Blue Theme - Calm and refreshing blue tones -->
+    <style name="Theme.OceanBlue" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/ocean_primary</item>
+        <item name="colorPrimaryVariant">@color/ocean_secondary</item>
+        <item name="colorSecondary">@color/ocean_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/ocean_background</item>
+        <item name="android:textColorPrimary">@color/ocean_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/ocean_text</item>
+    </style>
+
+    <!-- 🌅 Sunset Orange Theme - Warm and vibrant orange hues -->
+    <style name="Theme.SunsetOrange" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/sunset_primary</item>
+        <item name="colorPrimaryVariant">@color/sunset_secondary</item>
+        <item name="colorSecondary">@color/sunset_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/sunset_background</item>
+        <item name="android:textColorPrimary">@color/sunset_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/sunset_text</item>
+    </style>
+
+    <!-- 🌲 Forest Green Theme - Natural and earthy green palette -->
+    <style name="Theme.ForestGreen" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/forest_primary</item>
+        <item name="colorPrimaryVariant">@color/forest_secondary</item>
+        <item name="colorSecondary">@color/forest_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/forest_background</item>
+        <item name="android:textColorPrimary">@color/forest_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/forest_text</item>
+        <!-- Window flags to prevent status bar overlap -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/cool_pink</item>
+    </style>
+
+    <!-- 🌌 Midnight Purple Theme - Deep and mysterious purple shades -->
+    <style name="Theme.MidnightPurple" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/midnight_primary</item>
+        <item name="colorPrimaryVariant">@color/midnight_secondary</item>
+        <item name="colorSecondary">@color/midnight_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/midnight_background</item>
+        <item name="android:textColorPrimary">@color/midnight_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/midnight_text</item>
+    </style>
+
+    <!-- 🔴 Crimson Red Theme - Bold and passionate red tones -->
+    <style name="Theme.CrimsonRed" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/crimson_primary</item>
+        <item name="colorPrimaryVariant">@color/crimson_secondary</item>
+        <item name="colorSecondary">@color/crimson_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/crimson_background</item>
+        <item name="android:textColorPrimary">@color/crimson_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/crimson_text</item>
+    </style>
+
+    <!-- ⚡ Electric Blue Theme - Vibrant and energetic blue -->
+    <style name="Theme.ElectricBlue" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/electric_primary</item>
+        <item name="colorPrimaryVariant">@color/electric_secondary</item>
+        <item name="colorSecondary">@color/electric_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/electric_background</item>
+        <item name="android:textColorPrimary">@color/electric_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/electric_text</item>
+        <!-- Window flags to prevent status bar overlap -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/purple_200</item>
+    </style>
+
+    <!-- ✨ Golden Amber Theme - Luxurious golden tones -->
+    <style name="Theme.GoldenAmber" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/golden_primary</item>
+        <item name="colorPrimaryVariant">@color/golden_secondary</item>
+        <item name="colorSecondary">@color/golden_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/golden_background</item>
+        <item name="android:textColorPrimary">@color/golden_text</item>
+        <!-- Navigation Drawer -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/golden_text</item>
+        <!-- Window flags to prevent status bar overlap -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/cool_pink</item>
+    </style>
+
+    <!-- 🌙 Dark Mode Theme - Sleek and modern dark interface -->
+    <style name="Theme.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Activity Colors -->
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryVariant">@color/dark_secondary</item>
+        <item name="colorSecondary">@color/dark_accent</item>
+        <item name="colorOnPrimary">@color/dark_text</item>
+        <item name="colorOnSecondary">@color/dark_text</item>
+        <item name="android:windowBackground">@color/dark_primary</item>
+        <item name="android:textColorPrimary">@color/dark_text</item>
+        <item name="android:textColorSecondary">@color/dark_text_secondary</item>
+        <!-- Navigation Drawer Colors -->
+        <item name="colorSurface">@color/dark_secondary</item>
+        <item name="colorOnSurface">@color/dark_text</item>
+    </style>
+
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/NFeedback"
+        android:title="@string/NFeedback"
+        android:icon="@drawable/feedback_ic"/>
+
+    <item android:id="@+id/NSettings"
+        android:title="@string/NSettings"
+        android:icon="@drawable/settings_ic"/>
+
+    <item android:id="@+id/NAbout"
+        android:title="@string/NAbout"
+        android:icon="@drawable/about_ic"/>
+
+    <item android:id="@+id/NExit"
+        android:title="@string/NExit"
+        android:icon="@drawable/exit_ic"/>
+
+</menu>
