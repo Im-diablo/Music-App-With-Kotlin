@@ -42,10 +42,10 @@
             tools:ignore="NestedWeights" />
 
         <ImageButton
-            android:id="@+id/favBtn"
+            android:id="@+id/favBtnPA"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="15dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/fav"
             android:src="@drawable/fav_empty_ic"

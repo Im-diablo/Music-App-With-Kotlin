@@ -45,6 +45,7 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         return musicList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateMusicList(searchList : ArrayList<Music>){
         musicList = ArrayList()
         musicList.addAll(searchList)

@@ -22,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.my_music.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -84,9 +86,6 @@ class MainActivity : AppCompatActivity() {
         // Request permissions and initialize if already granted
         requestRuntimePermissions()
 
-
-
-
         binding.shuffleBtn.setOnClickListener {
             // Toast.makeText(this@MainActivity, "Shuffle", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MainActivity, PlayerActivity::class.java)
@@ -96,12 +95,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.FavButton.setOnClickListener {
-            // Toast.makeText(this@MainActivity, "Fav", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this@MainActivity, FavActivity::class.java))
         }
 
         binding.playlistBtn.setOnClickListener {
-            // Toast.makeText(this@MainActivity, "Playlist", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this@MainActivity, PlaylistActivity::class.java))
         }
 
@@ -157,6 +154,15 @@ class MainActivity : AppCompatActivity() {
             // Also request notification permission if needed
             requestNotificationPermission()
         }
+        //for retriving fav data using sharedprefrences
+        FavActivity.favSongs = ArrayList()
+        val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE)
+        val jsonString = editor.getString("FavSongs", null)
+        val typeToken = object: TypeToken<ArrayList<Music>>(){}.type
+        if(jsonString != null){
+            val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
+            FavActivity.favSongs.addAll(data)
+        }
     }
 
     private fun requestNotificationPermission() {
@@ -168,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initializeLayout() {
         search = false
         // Trigger media scan to ensure all files are indexed
@@ -252,13 +259,6 @@ class MainActivity : AppCompatActivity() {
         return tempList
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!PlayerActivity.isPlaying && PlayerActivity.musicService != null) {
-           exitApplication()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_view_menu, menu)
         val searchView =menu?.findItem(R.id.searchView)?.actionView as SearchView
@@ -282,4 +282,19 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onResume() {
+        super.onResume()
+        //for storing data using sharedprefrences
+        val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavActivity.favSongs)
+        editor.putString("FavSongs", jsonString)
+        editor.apply()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!PlayerActivity.isPlaying && PlayerActivity.musicService != null) {
+            exitApplication()
+        }
+    }
 }

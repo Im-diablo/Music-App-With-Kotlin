@@ -39,9 +39,26 @@ fun setSongPosition(increment: Boolean) {
 
 fun exitApplication(){
     if(PlayerActivity.musicService != null){
+        // Save favorites before exiting
+        val editor = PlayerActivity.musicService!!.getSharedPreferences("FAV_SONGS", android.content.Context.MODE_PRIVATE).edit()
+        val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
+        editor.putString("FavSongs", jsonString)
+        editor.commit()  // Use commit() instead of apply() to ensure synchronous save before exit
+        
         PlayerActivity.musicService!!.stopForeground(true)
         PlayerActivity.musicService!!.mediaPlayer!!.release()
         PlayerActivity.musicService = null
     }
     exitProcess(1)
+}
+
+fun favChecker(id: String): Int{
+    PlayerActivity.isFav = false
+    FavActivity.favSongs.forEachIndexed { index, music ->
+        if(id == music.id){
+            PlayerActivity.isFav = true
+            return index
+        }
+    }
+    return -1
 }

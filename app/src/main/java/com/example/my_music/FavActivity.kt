@@ -1,15 +1,21 @@
 package com.example.my_music
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.my_music.databinding.ActivityFavBinding
 
 class FavActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFavBinding
+    private lateinit var adapter: FavAdapter
+
+    companion object{
+        var favSongs: ArrayList<Music> = ArrayList()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +32,12 @@ class FavActivity : AppCompatActivity() {
             v.setPadding(0, systemBars.top, 0, 0)
             insets
         }
-        
+
         binding.backBtnFav.setOnClickListener { finish() }
+        binding.favRV.setHasFixedSize(true)
+        binding.favRV.setItemViewCacheSize(13)
+        binding.favRV.layoutManager = GridLayoutManager(this, 4)
+        adapter = FavAdapter(this, favSongs)
+        binding.favRV.adapter = adapter
     }
 }

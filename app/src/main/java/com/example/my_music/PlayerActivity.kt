@@ -36,6 +36,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var min30: Boolean = false
         var min60: Boolean = false
         var nowPlayingId: String = ""
+        var isFav: Boolean = false
+        var fIndex: Int = -1
     }
 
 
@@ -120,10 +122,23 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             shareIntent.putExtra(Intent.EXTRA_STREAM, musicListPA[songPosition].path.toUri())
             startActivity(Intent.createChooser(shareIntent, "Share Music File!!"))
         }
+        binding.favBtnPA.setOnClickListener{
+            if(isFav) {
+                isFav = false
+                binding.favBtnPA.setImageResource(R.drawable.fav_empty_ic)
+                FavActivity.favSongs.removeAt(fIndex)
+            }
+            else{
+                isFav = true
+                binding.favBtnPA.setImageResource(R.drawable.favorite_ic)
+                FavActivity.favSongs.add(musicListPA[songPosition])
+            }
+        }
 
     }
 
     private fun setLayout() {
+        fIndex = favChecker(musicListPA[songPosition].id)
         Glide.with(this)
             .load(musicListPA[songPosition].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
@@ -134,6 +149,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.red))
         }
         if(min5s || min15 || min30 || min60) binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.cool_pink))
+        if(isFav) binding.favBtnPA.setImageResource(R.drawable.favorite_ic)
+        else binding.favBtnPA.setImageResource(R.drawable.fav_empty_ic)
     }
 
     private fun createMediaPlayer() {
@@ -196,6 +213,15 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListMA)
                 musicListPA.shuffle()
+                setLayout()
+            }
+
+            "FavAdapter" ->{
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA = ArrayList()
+                musicListPA.addAll(FavActivity.favSongs)
                 setLayout()
             }
         }
@@ -288,6 +314,15 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 if(min60) exitApplication()}.start()
             dialog.dismiss()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Save favorites when activity is destroyed
+        val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
+        val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
+        editor.putString("FavSongs", jsonString)
+        editor.apply()
     }
 }
 

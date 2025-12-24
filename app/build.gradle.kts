@@ -67,4 +67,6 @@ dependencies {
     ksp(libs.glide.ksp)
     //for Notification
     implementation("androidx.media:media:+")
+    implementation("com.google.code.gson:gson:2.8.6")
+
 }

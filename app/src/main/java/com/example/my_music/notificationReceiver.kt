@@ -50,6 +50,8 @@ class NotificationReceiver: BroadcastReceiver() {
             .into(NowPlaying.Companion.binding.songImageNP)
         NowPlaying.binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
         playMusic()
-
+        PlayerActivity.fIndex = favChecker(PlayerActivity.musicListPA[PlayerActivity.songPosition].id)
+        if(PlayerActivity.isFav) PlayerActivity.binding.favBtnPA.setImageResource(R.drawable.favorite_ic)
+        else PlayerActivity.binding.favBtnPA.setImageResource(R.drawable.fav_empty_ic)
     }
 }

@@ -17,7 +17,7 @@
     *   Shuffle & Repeat functionality.
     *   Seamless Mini Player at the bottom of the screen (tap to expand).
     *   Interactive notification controls with click-to-navigate support - tap the notification to jump directly to the currently playing song.
-*   **❤️ Favorites System**: Easily mark songs as favorites to build your go-to playlist.
+*   **❤️ Favorites System**: Mark songs as favorites with persistent storage - your favorites are saved and restored across app sessions. Browse your favorite tracks in a dedicated grid view.
 *   **⏱ Sleep Timer**: Fall asleep to your music without worry; set a timer to automatically stop playback.
 *   **🔍 Search**: Integrated search bar to quickly find and play specific tracks from your library.
 *   **📲 Share**: Share your favorite tracks with friends directly from the app.
@@ -31,6 +31,7 @@
 *   **Image Loading**: Glide
 *   **Navigation**: Android Navigation Components / Intent-based navigation
 *   **Threading**: Coroutines (implied usage in modern Android)
+*   **Data Persistence**: SharedPreferences with Gson for favorites storage
 
 ---
 
