@@ -224,6 +224,15 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 musicListPA.addAll(FavActivity.favSongs)
                 setLayout()
             }
+            "FavShuffle" ->{
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA = ArrayList()
+                musicListPA.addAll(FavActivity.favSongs)
+                musicListPA.shuffle()
+                setLayout()
+            }
         }
     }
 

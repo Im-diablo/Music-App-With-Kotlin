@@ -1,6 +1,8 @@
 package com.example.my_music
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -8,10 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.my_music.databinding.ActivityFavBinding
 
 class FavActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityFavBinding
     private lateinit var adapter: FavAdapter
-
     companion object{
         var favSongs: ArrayList<Music> = ArrayList()
     }
@@ -39,5 +39,12 @@ class FavActivity : AppCompatActivity() {
         binding.favRV.layoutManager = GridLayoutManager(this, 4)
         adapter = FavAdapter(this, favSongs)
         binding.favRV.adapter = adapter
+        if(favSongs.size<1) binding.favShuffle.visibility = View.INVISIBLE
+        binding.favShuffle.setOnClickListener {
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "FavShuffle")
+            startActivity(intent)
+        }
     }
 }
