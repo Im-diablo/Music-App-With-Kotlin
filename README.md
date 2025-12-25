@@ -18,6 +18,7 @@
     *   Seamless Mini Player at the bottom of the screen (tap to expand).
     *   Interactive notification controls with click-to-navigate support - tap the notification to jump directly to the currently playing song.
 *   **❤️ Favorites System**: Mark songs as favorites with persistent storage - your favorites are saved and restored across app sessions. Browse your favorite tracks in a dedicated grid view, and shuffle play all favorites with one tap.
+*   **📜 Playlist Management**: Create custom playlists with personalized names and creator info. Organize your music collection in a grid view, delete unwanted playlists, and access detailed playlist views.
 *   **⏱ Sleep Timer**: Fall asleep to your music without worry; set a timer to automatically stop playback.
 *   **🔍 Search**: Integrated search bar to quickly find and play specific tracks from your library.
 *   **📲 Share**: Share your favorite tracks with friends directly from the app.
