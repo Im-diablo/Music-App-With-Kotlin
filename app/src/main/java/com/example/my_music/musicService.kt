@@ -91,6 +91,8 @@ class MusicService: Service() {
             else musicService!!.mediaPlayer!!.reset()
             musicService!!.mediaPlayer!!.setDataSource(musicListPA[songPosition].path)
             musicService!!.mediaPlayer!!.prepare()
+            musicService!!.mediaPlayer!!.start()
+            PlayerActivity.isPlaying = true
             binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
             musicService!!.showNotification(R.drawable.pause_ic)
             binding.seekbarStartTV.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())

@@ -2,13 +2,25 @@ package com.example.my_music
 
 import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
+import androidx.core.content.edit
 import com.example.my_music.PlayerActivity.Companion.musicListPA
 import com.example.my_music.PlayerActivity.Companion.songPosition
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
-class Music (val id:String, val title:String, val album:String, val artist:String, val duration: Long = 0, val path:String,
+data class Music(val id:String, val title:String, val album:String, val artist:String, val duration: Long = 0, val path:String,
 var artUri:String)
+
+class Playlist{
+    lateinit var name: String
+    lateinit var playlist: ArrayList<Music>
+    lateinit var createdBy: String
+    lateinit var createdOn: String
+}
+
+class musicPlaylist{
+    var ref: ArrayList<Playlist> = ArrayList()
+}
 
 @SuppressLint("DefaultLocale")
 fun formatDuration(duration: Long):String {
@@ -40,10 +52,13 @@ fun setSongPosition(increment: Boolean) {
 fun exitApplication(){
     if(PlayerActivity.musicService != null){
         // Save favorites before exiting
-        val editor = PlayerActivity.musicService!!.getSharedPreferences("FAV_SONGS", android.content.Context.MODE_PRIVATE).edit()
-        val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
-        editor.putString("FavSongs", jsonString)
-        editor.commit()  // Use commit() instead of apply() to ensure synchronous save before exit
+        PlayerActivity.musicService!!.getSharedPreferences(
+            "FAV_SONGS",
+            android.content.Context.MODE_PRIVATE
+        ).edit(commit = true) {
+            val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
+            putString("FavSongs", jsonString)
+        }
         
         PlayerActivity.musicService!!.stopForeground(true)
         PlayerActivity.musicService!!.mediaPlayer!!.release()
