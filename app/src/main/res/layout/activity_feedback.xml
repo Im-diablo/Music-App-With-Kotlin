@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FeedbackActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/cool_pink"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/topicFA"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:hint="@string/topic_feedback"
+        android:layout_gravity="center|start"
+        android:paddingHorizontal="16dp"
+        android:inputType="textEmailSubject"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/emailFA"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:hint="@string/email_feedback"
+        android:layout_gravity="center|start"
+        android:paddingHorizontal="16dp"
+        android:inputType="textEmailAddress"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/messageFA"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:hint="@string/message_feedback"
+        android:layout_gravity="center|start"
+        android:paddingHorizontal="16dp"/>
+
+    <Button
+        android:id="@+id/sendFA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_feedback"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/cool_pink"
+        android:textSize="20sp"
+        android:gravity="center"/>
+
+</LinearLayout>

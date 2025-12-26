@@ -104,16 +104,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.navView.setNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.NFeedback -> {
-                    Toast.makeText(applicationContext, "Feedback", Toast.LENGTH_SHORT).show()
+                R.id.NFeedback -> { startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
                     true
                 }
-                R.id.NSettings -> {
-                    Toast.makeText(applicationContext, "Settings", Toast.LENGTH_SHORT).show()
+                R.id.NSettings -> { startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                     true
                 }
-                R.id.NAbout -> {
-                    Toast.makeText(applicationContext, "About", Toast.LENGTH_SHORT).show()
+                R.id.NAbout -> { startActivity(Intent(this@MainActivity, AboutActivity::class.java))
                     true
                 }
                 R.id.NExit -> {

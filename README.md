@@ -22,6 +22,8 @@
 *   **⏱ Sleep Timer**: Fall asleep to your music without worry; set a timer to automatically stop playback.
 *   **🔍 Search**: Integrated search bar to quickly find and play specific tracks from your library.
 *   **📲 Share**: Share your favorite tracks with friends directly from the app.
+*   **📧 Feedback**: Send feedback via email directly from the app with topic and message fields.
+*   **⚙️ Settings & About**: Access app settings and view app information including version details from the navigation drawer.
 
 ---
 

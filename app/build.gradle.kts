@@ -13,8 +13,8 @@ android {
         applicationId = "com.example.my_music"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,5 +68,8 @@ dependencies {
     //for Notification
     implementation("androidx.media:media:+")
     implementation("com.google.code.gson:gson:2.8.6")
+    //for sending mail
+    implementation("com.sun.mail:android-mail:1.6.4")
+    implementation("com.sun.mail:android-activation:1.6.4")
 
 }
