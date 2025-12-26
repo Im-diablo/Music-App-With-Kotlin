@@ -23,9 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.My_Music">
         <activity
-            android:name=".PlaylistDetails"
+            android:name=".selectionActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PlaylistDetails"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PlaylistActivity"
             android:exported="false"

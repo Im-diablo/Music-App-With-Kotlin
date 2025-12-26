@@ -1,5 +1,6 @@
 package com.example.my_music
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -88,5 +89,10 @@ class PlaylistActivity : AppCompatActivity() {
             musicPlaylist.ref.add(tempPlaylist)
             adapter.refreshPlaylist()
         }
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume(){
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 }

@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.my_music.databinding.PlaylistViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class PlaylistAdapter(private val context: Context, private var playlistList: ArrayList<Playlist>): RecyclerView.Adapter<PlaylistAdapter.MyHolder>() {
+class PlaylistAdapter(private val context: Context, private var playlistList: ArrayList<Playlist>, private var playlistDetails: Boolean = false): RecyclerView.Adapter<PlaylistAdapter.MyHolder>() {
     class MyHolder(binding: PlaylistViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.playlistImg
         val name = binding.playlistName
@@ -45,6 +47,12 @@ class PlaylistAdapter(private val context: Context, private var playlistList: Ar
             val intent = Intent(context, PlaylistDetails::class.java)
             intent.putExtra("index", position)
             ContextCompat.startActivity(context, intent, null)
+        }
+        if(PlaylistActivity.musicPlaylist.ref[position].playlist.size >0){
+            Glide.with(context)
+                .load(PlaylistActivity.musicPlaylist.ref[position].playlist[0].artUri)
+                .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
+                .into(holder.image)
         }
     }
 

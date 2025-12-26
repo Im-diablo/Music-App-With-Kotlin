@@ -36,8 +36,8 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:layout_marginTop="5dp"/>
-
+            android:layout_marginTop="5dp"
+            android:singleLine="true"/>
 
     </LinearLayout>
 
@@ -49,15 +49,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/cool_pink">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/playlistImgPD"
             android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:src="@drawable/splash_img"/>
+            android:src="@drawable/splash_img"
+            app:shapeAppearanceOverlay="@style/curved" />
 
         <TextView
+            android:id="@+id/playlistInfoPD"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/playlist_name"
@@ -96,7 +99,8 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.894"
         app:strokeColor="@color/cool_pink"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="2dp"
+        android:visibility="invisible"/>
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"

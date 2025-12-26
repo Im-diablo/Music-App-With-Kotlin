@@ -189,6 +189,7 @@ class MainActivity : AppCompatActivity() {
         binding.totalSongs.text = "Total Songs : "+musicAdapter.itemCount
     }
 
+    @SuppressLint("SetTextI18n")
     private fun scanMediaFiles() {
         // Scan common music directories
         val musicDirs = arrayOf(

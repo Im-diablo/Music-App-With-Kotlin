@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.my_music.databinding.MusicViewBinding
 
-class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>): RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>, private val playlistDetails: Boolean = false,
+ private val selectionActivity: Boolean= false)
+    : RecyclerView.Adapter<MusicAdapter.MyHolder>() {
     class MyHolder(binding: MusicViewBinding): RecyclerView.ViewHolder(binding.root){
         val title = binding.songName
         val album = binding.songAlbum
@@ -32,11 +35,37 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             .load(musicList[position].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
             .into(holder.image)
-        holder.root.setOnClickListener{
-            when{
-                MainActivity.search -> sendIntent(("MusicAdapterSearch"), pos = position)
-                musicList[position].id == PlayerActivity.nowPlayingId -> sendIntent(("NowPlaying"), pos = PlayerActivity.songPosition)
-                else -> sendIntent("MusicAdapter", pos = position)
+        when {
+            playlistDetails -> {
+                holder.root.setOnClickListener {
+                    sendIntent("PlaylistDetailsAdapter", pos = position)
+                }
+            }
+
+            selectionActivity -> {
+                val isSelected = checkIfExists(musicList[position])
+                holder.root.setBackgroundColor(
+                    if (isSelected) ContextCompat.getColor(context, R.color.cool_pink)
+                    else ContextCompat.getColor(context, R.color.white)
+                )
+
+                holder.root.setOnClickListener {
+                    if (addSong(musicList[position])) {
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.cool_pink))
+                    } else {
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                    }
+                }
+            }
+            else -> {
+                holder.root.setOnClickListener {
+                    when {
+                        MainActivity.search -> sendIntent(("MusicAdapterSearch"), pos = position)
+                        musicList[position].id == PlayerActivity.nowPlayingId ->
+                            sendIntent("NowPlaying", pos = PlayerActivity.songPosition)
+                        else -> sendIntent("MusicAdapter", pos = position)
+                    }
+                }
             }
         }
     }
@@ -57,5 +86,33 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         intent.putExtra("index", pos)
         intent.putExtra("class", ref)
         context.startActivity(intent ,null)
+    }
+
+    private fun checkIfExists(song: Music): Boolean {
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.forEach { music ->
+            if (song.id == music.id) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun addSong(song: Music): Boolean{
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.forEachIndexed { index, music ->
+            if (song.id == music.id) {
+                PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.removeAt(
+                    index
+                )
+                return false
+            }
+        }
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.add(song)
+        return true
+    }
+
+    fun refreshPlaylist(){
+        musicList = ArrayList()
+        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist
+        notifyDataSetChanged()
     }
 }

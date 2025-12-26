@@ -37,4 +37,5 @@
     <string name="user_name">User Name</string>
     <string name="add_song">Add</string>
     <string name="remove_all">Remove All</string>
+    <string name="search_song">Search Song</string>
 </resources>
