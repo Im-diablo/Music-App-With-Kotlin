@@ -27,12 +27,17 @@ class PlaylistAdapter(private val context: Context, private var playlistList: Ar
         holder.name.text = playlistList[position].name
         holder.name.isSelected = true
         holder.delete.setOnClickListener {
+            val currentPosition = holder.adapterPosition
+            if (currentPosition == -1 || currentPosition >= PlaylistActivity.musicPlaylist.ref.size) return@setOnClickListener
+            
             val builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(playlistList[position].name)
+            builder.setTitle(playlistList[currentPosition].name)
                 .setMessage("Do you really want to delete this playlist?")
                 .setPositiveButton("Yes"){dialog,_->
-                    PlaylistActivity.musicPlaylist.ref.removeAt(position)
-                    refreshPlaylist()
+                    if (currentPosition < PlaylistActivity.musicPlaylist.ref.size) {
+                        PlaylistActivity.musicPlaylist.ref.removeAt(currentPosition)
+                        refreshPlaylist()
+                    }
                    dialog.dismiss()
                 }
                 .setNegativeButton("No"){dialog, _ ->
@@ -44,11 +49,14 @@ class PlaylistAdapter(private val context: Context, private var playlistList: Ar
             customDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, R.color.cool_green))
         }
         holder.root.setOnClickListener {
+            val currentPosition = holder.adapterPosition
+            if (currentPosition == -1) return@setOnClickListener
+            
             val intent = Intent(context, PlaylistDetails::class.java)
-            intent.putExtra("index", position)
+            intent.putExtra("index", currentPosition)
             ContextCompat.startActivity(context, intent, null)
         }
-        if(PlaylistActivity.musicPlaylist.ref[position].playlist.size >0){
+        if(position < PlaylistActivity.musicPlaylist.ref.size && PlaylistActivity.musicPlaylist.ref[position].playlist.size > 0){
             Glide.with(context)
                 .load(PlaylistActivity.musicPlaylist.ref[position].playlist[0].artUri)
                 .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())

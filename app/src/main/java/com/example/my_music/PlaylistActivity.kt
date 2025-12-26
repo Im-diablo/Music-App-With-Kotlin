@@ -95,4 +95,13 @@ class PlaylistActivity : AppCompatActivity() {
         super.onResume()
         adapter.notifyDataSetChanged()
     }
+
+    override fun onPause() {
+        super.onPause()
+        // Save playlist data when leaving this activity
+        val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
+        val jsonStringPlaylist = com.google.gson.GsonBuilder().create().toJson(musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
+    }
 }

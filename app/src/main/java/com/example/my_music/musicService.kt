@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Handler
@@ -12,16 +13,18 @@ import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import com.example.my_music.PlayerActivity.Companion.binding
+import com.example.my_music.PlayerActivity.Companion.isPlaying
 import com.example.my_music.PlayerActivity.Companion.musicListPA
 import com.example.my_music.PlayerActivity.Companion.musicService
 import com.example.my_music.PlayerActivity.Companion.nowPlayingId
 import com.example.my_music.PlayerActivity.Companion.songPosition
 
-class MusicService: Service() {
+class MusicService: Service(), AudioManager.OnAudioFocusChangeListener {
     private var myBinder = MyBinder()
     public var mediaPlayer: MediaPlayer? = null
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
+    lateinit var audioManager: AudioManager
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "My Music")
@@ -35,9 +38,11 @@ class MusicService: Service() {
 
     fun showNotification(PlayPauseBtn: Int){
 
-        val intent = Intent(baseContext, PlayerActivity::class.java)
-        intent.putExtra("index", songPosition)
-        intent.putExtra("class", "NowPlaying")
+        // if we wanna open the player activity directy from notification, just uncomment it and comment the next line
+//        val intent = Intent(baseContext, PlayerActivity::class.java)
+//        intent.putExtra("index", songPosition)
+//        intent.putExtra("class", "NowPlaying")
+        val intent = Intent(baseContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         val contentIntent = PendingIntent.getActivity(baseContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
@@ -110,5 +115,24 @@ class MusicService: Service() {
             Handler(Looper.getMainLooper()).postDelayed(runnable, 200)
         }
         Handler(Looper.getMainLooper()).postDelayed(runnable, 0)
+    }
+
+    override fun onAudioFocusChange(focusChange: Int) {
+        if(focusChange <= 0){
+            // Pause Music
+            binding.playPauseBtn.setImageResource(R.drawable.play_ic)
+            NowPlaying.binding.playPauseBtnNp.setIconResource(R.drawable.play_ic)
+            showNotification(R.drawable.play_ic)
+            isPlaying = false
+            mediaPlayer!!.pause()
+        }
+        else {
+            // Play Music
+            binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
+            NowPlaying.binding.playPauseBtnNp.setIconResource(R.drawable.pause_ic)
+            showNotification(R.drawable.pause_ic)
+            isPlaying = true
+            mediaPlayer!!.start()
+        }
     }
 }

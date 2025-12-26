@@ -89,6 +89,9 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
     }
 
     private fun checkIfExists(song: Music): Boolean {
+        if (PlaylistDetails.currentPlaylistPos < 0 || PlaylistDetails.currentPlaylistPos >= PlaylistActivity.musicPlaylist.ref.size) {
+            return false
+        }
         PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.forEach { music ->
             if (song.id == music.id) {
                 return true
@@ -98,6 +101,9 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
     }
 
     private fun addSong(song: Music): Boolean{
+        if (PlaylistDetails.currentPlaylistPos < 0 || PlaylistDetails.currentPlaylistPos >= PlaylistActivity.musicPlaylist.ref.size) {
+            return false
+        }
         PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.forEachIndexed { index, music ->
             if (song.id == music.id) {
                 PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist.removeAt(
@@ -112,7 +118,9 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
 
     fun refreshPlaylist(){
         musicList = ArrayList()
-        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist
+        if (PlaylistDetails.currentPlaylistPos >= 0 && PlaylistDetails.currentPlaylistPos < PlaylistActivity.musicPlaylist.ref.size) {
+            musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist
+        }
         notifyDataSetChanged()
     }
 }

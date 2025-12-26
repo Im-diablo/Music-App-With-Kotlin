@@ -149,9 +149,7 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(permission)
         } else {
-            // Permission already granted, initialize layout
             initializeLayout()
-            // Also request notification permission if needed
             requestNotificationPermission()
         }
         //for retriving fav data using sharedprefrences
@@ -162,6 +160,17 @@ class MainActivity : AppCompatActivity() {
         if(jsonString != null){
             val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
             FavActivity.favSongs.addAll(data)
+        }
+        PlaylistActivity.musicPlaylist = musicPlaylist()
+        val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+        if(jsonStringPlaylist != null){
+            try {
+                val dataPlaylist: musicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, musicPlaylist::class.java)
+                PlaylistActivity.musicPlaylist = dataPlaylist
+            } catch (e: Exception) {
+                PlaylistActivity.musicPlaylist = musicPlaylist()
+                editor.edit().remove("MusicPlaylist").apply()
+            }
         }
     }
 
@@ -289,6 +298,10 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavActivity.favSongs)
         editor.putString("FavSongs", jsonString)
+
+        //for storing data using sharedprefrences for playlist
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
     }
 

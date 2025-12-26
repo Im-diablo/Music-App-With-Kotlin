@@ -1,5 +1,6 @@
 package com.example.my_music
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.my_music.databinding.ActivityPlaylistDetailsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 
 class PlaylistDetails : AppCompatActivity() {
 
@@ -23,11 +25,18 @@ class PlaylistDetails : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setTheme(R.style.Theme_ForestGreen)
         binding = ActivityPlaylistDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         currentPlaylistPos = intent.extras?.get("index") as Int
+        
+        if (currentPlaylistPos < 0 || currentPlaylistPos >= PlaylistActivity.musicPlaylist.ref.size) {
+            finish()
+            return
+        }
+    
+        PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist = checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist)
+        
         window.statusBarColor = androidx.core.content.ContextCompat.getColor(this, R.color.cool_pink)
         binding.playlistDetailsRV.setItemViewCacheSize(10)
         binding.playlistDetailsRV.setHasFixedSize(true)
@@ -71,13 +80,21 @@ class PlaylistDetails : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
+        
+        // Check if playlist still exists
+        if (currentPlaylistPos < 0 || currentPlaylistPos >= PlaylistActivity.musicPlaylist.ref.size) {
+            finish()
+            return
+        }
+        
         binding.playlistNamePD.text = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].name
         binding.playlistInfoPD.text = "Total ${PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist.size} Songs.\n\n" +
                 "Created On:\n${PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdOn}\n\n" +
                 "   --${PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdBy}"
-        if(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist.size > 0){
+        if(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist.isNotEmpty()){
             Glide.with(this)
                 .load(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist[0].artUri)
                 .apply(RequestOptions().placeholder(R.mipmap.default_music_icon).centerCrop())
@@ -85,5 +102,15 @@ class PlaylistDetails : AppCompatActivity() {
             binding.shufflePD.visibility = View.VISIBLE
         }
         adapter.refreshPlaylist()
+        //for storing data using sharedprefrences
+        val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavActivity.favSongs)
+        editor.putString("FavSongs", jsonString)
+
+        //for storing data using sharedprefrences for playlist
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
     }
+
 }

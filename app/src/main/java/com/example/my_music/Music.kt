@@ -51,6 +51,7 @@ fun setSongPosition(increment: Boolean) {
 
 fun exitApplication(){
     if(PlayerActivity.musicService != null){
+        PlayerActivity.musicService!!.audioManager.abandonAudioFocus(PlayerActivity.musicService)
         // Save favorites before exiting
         PlayerActivity.musicService!!.getSharedPreferences(
             "FAV_SONGS",
@@ -58,6 +59,8 @@ fun exitApplication(){
         ).edit(commit = true) {
             val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
             putString("FavSongs", jsonString)
+            val jsonStringPlaylist = com.google.gson.GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+            putString("MusicPlaylist", jsonStringPlaylist)
         }
         
         PlayerActivity.musicService!!.stopForeground(true)
@@ -76,4 +79,12 @@ fun favChecker(id: String): Int{
         }
     }
     return -1
+}
+
+fun checkPlaylist(playlist: ArrayList<Music>): ArrayList<Music>{
+    playlist.removeAll { music ->
+        val file = java.io.File(music.path)
+        !file.exists()
+    }
+    return playlist
 }

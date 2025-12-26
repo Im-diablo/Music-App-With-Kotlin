@@ -22,7 +22,7 @@ class FavActivity : AppCompatActivity() {
         setTheme(R.style.Theme_GoldenAmber)
         binding = ActivityFavBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+        favSongs = checkPlaylist(favSongs)
         // Set status bar color and handle window insets
         window.statusBarColor = androidx.core.content.ContextCompat.getColor(this, R.color.cool_pink)
         
