@@ -100,7 +100,8 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
                     android:scrollbarStyle="outsideOverlay"
-                    android:scrollbarThumbVertical="@drawable/scroll_bar_ic"/>
+                    android:scrollbarThumbVertical="@drawable/scroll_bar_ic"
+                    android:paddingVertical="2dp"/>
 
                 <View
                     android:layout_width="match_parent"

@@ -31,8 +31,20 @@ fun formatDuration(duration: Long):String {
 
 fun getImageArt(path: String): ByteArray?{
     val retriever = MediaMetadataRetriever()
-    retriever.setDataSource(path)
-    return retriever.embeddedPicture
+    try {
+        if (path.startsWith("content://")) {
+            // For content URIs, return null (can't extract album art easily)
+            return null
+        } else {
+            // For file paths
+            retriever.setDataSource(path)
+            return retriever.embeddedPicture
+        }
+    } catch (e: Exception) {
+        return null
+    } finally {
+        retriever.release()
+    }
 }
 
 fun setSongPosition(increment: Boolean) {
@@ -52,7 +64,7 @@ fun setSongPosition(increment: Boolean) {
 fun exitApplication(){
     if(PlayerActivity.musicService != null){
         PlayerActivity.musicService!!.audioManager.abandonAudioFocus(PlayerActivity.musicService)
-        // Save favorites before exiting
+        // Save favorites, playlists, and theme before exiting
         PlayerActivity.musicService!!.getSharedPreferences(
             "FAV_SONGS",
             android.content.Context.MODE_PRIVATE
@@ -61,6 +73,14 @@ fun exitApplication(){
             putString("FavSongs", jsonString)
             val jsonStringPlaylist = com.google.gson.GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
             putString("MusicPlaylist", jsonStringPlaylist)
+        }
+        
+        // Save current theme
+        PlayerActivity.musicService!!.getSharedPreferences(
+            "THEMES",
+            android.content.Context.MODE_PRIVATE
+        ).edit(commit = true) {
+            putInt("themeIndex", MainActivity.themeIndex)
         }
         
         PlayerActivity.musicService!!.stopForeground(true)

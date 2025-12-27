@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var musicAdapter: MusicAdapter
+
     companion object{
         lateinit var musicListMA: ArrayList<Music>
         lateinit var musicListSearch : ArrayList<Music>
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         val currentTheme = arrayOf(R.style.coolPink, R.style.coolBlue, R.style.coolPurple, R.style.coolGreen, R.style.coolBlack)
         val currentThemeNav = arrayOf(R.style.coolPinkNav, R.style.coolBlueNav, R.style.coolPurpleNav, R.style.coolGreenNav, R.style.coolBlackNav)
         val currentGradient = arrayOf(R.drawable.gradient_pink, R.drawable.gradient_blue, R.drawable.gradient_purple, R.drawable.gradient_green, R.drawable.gradient_black)
-
+        var sortOrder: Int = 0
+        var sortingList= arrayOf(MediaStore.Audio.Media.DATE_ADDED + " DESC", MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.SIZE + " DESC")
     }
     
     // Modern permissions launcher using Activity Result API
@@ -192,8 +194,9 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun initializeLayout() {
         search = false
-        // Trigger media scan to ensure all files are indexed
         scanMediaFiles()
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        sortOrder = sortEditor.getInt("sortOrder", 0)
         // Set up RecyclerView
         musicListMA = getAllAudio()
         binding.MusicRV.setHasFixedSize(true)
@@ -248,7 +251,7 @@ class MainActivity : AppCompatActivity() {
         val tempList = ArrayList<Music>()
         val selection = MediaStore.Audio.Media.IS_MUSIC + " != 0"
         val projection = arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATE_ADDED, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID)
-        val cursor = this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null)
+        val cursor = this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, sortingList[sortOrder], null)
         if (cursor != null)
             if(cursor.moveToFirst())
                 do{
@@ -312,6 +315,15 @@ class MainActivity : AppCompatActivity() {
         val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
         editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
+
+        // For Sorting
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        val sortValue = sortEditor.getInt("sortOrder", 0)
+        if(sortOrder != sortValue) {
+            sortOrder= sortValue
+            musicListMA = getAllAudio()
+            musicAdapter.updateMusicList(musicListMA)
+        }
     }
 
     override fun onDestroy() {
