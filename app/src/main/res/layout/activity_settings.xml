@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,5 +16,103 @@
         android:background="@color/cool_pink"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <TextView
+        android:id="@+id/setTheme"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:text="@string/set_theme"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
+        
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/coolPink"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/circle_ic"
+            android:tint="@color/cool_pink"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/coolBlue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/circle_ic"
+            android:tint="@color/cool_blue"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/coolPurple"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/circle_ic"
+            android:tint="@color/purple_500"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/coolGreen"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/circle_ic"
+            android:tint="@color/cool_green"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/coolBlack"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/circle_ic"
+            android:tint="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:layout_marginVertical="2dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/sortBy"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:text="@string/sort_by"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:gravity="center|start"
+            android:layout_weight="1"
+            android:paddingStart="5dp"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/sort_ic"
+            android:padding="5dp"
+            android:tint="@color/cool_pink"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/versionName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:text="@string/version_name"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"/>
 
 </LinearLayout>
