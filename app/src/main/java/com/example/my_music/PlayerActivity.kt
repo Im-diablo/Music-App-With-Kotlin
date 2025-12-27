@@ -5,11 +5,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.MediaStore
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
@@ -42,8 +45,6 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var fIndex: Int = -1
     }
 
-
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,36 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        initializeLayout()
+        if(intent.data?.scheme.contentEquals("content")){
+            songPosition = 0
+            musicListPA = ArrayList()
+            musicListPA.add(getMusicDetails(intent.data!!))
+            
+            // Set up UI for external file
+            binding.currentSongPA.text = musicListPA[songPosition].title
+            binding.currentSongPA.isSelected = true
+            
+            // Use default icon for external files
+            Glide.with(this)
+                .load(R.mipmap.default_music_icon)
+                .apply(RequestOptions().centerCrop())
+                .into(binding.songImagePA)
+            
+            if(musicService != null) {
+                try {
+                    createMediaPlayer()
+                } catch (e: Exception) {
+                    val intentService = Intent(this, MusicService::class.java)
+                    bindService(intentService, this, BIND_AUTO_CREATE)
+                    startService(intentService)
+                }
+            } else {
+                val intentService = Intent(this, MusicService::class.java)
+                bindService(intentService, this, BIND_AUTO_CREATE)
+                startService(intentService)
+            }
+        }
+        else initializeLayout()
         binding.playPauseBtn.setOnClickListener {if (isPlaying) pauseMusic() else playMusic()}
         binding.prevBtn.setOnClickListener { prevNextSong(increment = false) }
         binding.nextBtn.setOnClickListener { prevNextSong(increment = true) }
@@ -139,7 +169,6 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
 
     }
-
     private fun setLayout() {
         fIndex = favChecker(musicListPA[songPosition].id)
         Glide.with(this)
@@ -160,7 +189,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         try {
             if (musicService!!.mediaPlayer == null) musicService!!.mediaPlayer = MediaPlayer()
             else musicService!!.mediaPlayer!!.reset()
-            musicService!!.mediaPlayer!!.setDataSource(musicListPA[songPosition].path)
+            
+            val path = musicListPA[songPosition].path
+            if (path.startsWith("content://")) {
+                musicService!!.mediaPlayer!!.setDataSource(this, Uri.parse(path))
+            } else {
+                musicService!!.mediaPlayer!!.setDataSource(path)
+            }
+            
             musicService!!.mediaPlayer!!.prepare()
             musicService!!.mediaPlayer!!.start()
             isPlaying = true
@@ -173,6 +209,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
             nowPlayingId = musicListPA[songPosition].id
         } catch (e: Exception) {
+            android.util.Log.e("PlayerActivity", "Error creating media player: ${e.message}", e)
+            Toast.makeText(this, "Error playing audio: ${e.message}", Toast.LENGTH_LONG).show()
             return
         }
     }
@@ -190,72 +228,148 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 else binding.playPauseBtn.setImageResource(R.drawable.play_ic)
             }
             "MusicAdapterSearch" -> {
-                // for starting service
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListSearch)
                 setLayout()
+                
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
             "MusicAdapter" -> {
-                // for starting service
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListMA)
                 setLayout()
+                
+                if(musicService != null) {
+                    // Service already running, create media player immediately
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        // If direct creation fails, rebind to service
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    // Service not running, start and bind to it
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
 
             "MainActivity" -> {
-                // for starting service
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.musicListMA)
                 musicListPA.shuffle()
                 setLayout()
+                
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
 
             "FavAdapter" ->{
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(FavActivity.favSongs)
                 setLayout()
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
             "FavShuffle" ->{
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(FavActivity.favSongs)
                 musicListPA.shuffle()
                 setLayout()
+                
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
             "PlaylistDetailsAdapter" ->{
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 if (PlaylistDetails.currentPlaylistPos >= 0 && PlaylistDetails.currentPlaylistPos < PlaylistActivity.musicPlaylist.ref.size) {
                     musicListPA.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist)
                 }
                 setLayout()
+                
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
             }
             "PlaylistDetailsShuffle" ->{
-                val intent = Intent(this, MusicService::class.java)
-                bindService(intent, this, BIND_AUTO_CREATE)
-                startService(intent)
                 musicListPA = ArrayList()
                 if (PlaylistDetails.currentPlaylistPos >= 0 && PlaylistDetails.currentPlaylistPos < PlaylistActivity.musicPlaylist.ref.size) {
                     musicListPA.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistDetails.currentPlaylistPos].playlist)
                     musicListPA.shuffle()
                 }
                 setLayout()
+                
+                if(musicService != null) {
+                    try {
+                        createMediaPlayer()
+                    } catch (e: Exception) {
+                        val intent = Intent(this, MusicService::class.java)
+                        bindService(intent, this, BIND_AUTO_CREATE)
+                        startService(intent)
+                    }
+                } else {
+                    val intent = Intent(this, MusicService::class.java)
+                    bindService(intent, this, BIND_AUTO_CREATE)
+                    startService(intent)
+                }
 
             }
         }
@@ -355,11 +469,48 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     override fun onDestroy() {
         super.onDestroy()
+        if(musicListPA[songPosition].id == "UNKNOWN" && !isPlaying) exitApplication()
         // Save favorites when activity is destroyed
         val editor = getSharedPreferences("FAV_SONGS", MODE_PRIVATE).edit()
         val jsonString = com.google.gson.GsonBuilder().create().toJson(FavActivity.favSongs)
         editor.putString("FavSongs", jsonString)
         editor.apply()
+    }
+
+    private fun getMusicDetails(contentUri: Uri): Music{
+        var cursor: Cursor? = null
+        try{
+            val projection = arrayOf(
+                MediaStore.Audio.Media.DATA, 
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media._ID
+            )
+            cursor = this.contentResolver.query(contentUri, projection, null, null, null)
+            cursor!!.moveToFirst()
+            
+            val dataColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
+            val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
+            val titleColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
+            val artistColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
+            val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
+            val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+            
+            val path = if (dataColumn >= 0) cursor.getString(dataColumn) else null
+            val finalPath = if (path.isNullOrEmpty()) contentUri.toString() else path
+            
+            val duration = if (durationColumn >= 0) cursor.getLong(durationColumn) else 0L
+            val title = if (titleColumn >= 0) cursor.getString(titleColumn) ?: "Unknown" else "Unknown"
+            val artist = if (artistColumn >= 0) cursor.getString(artistColumn) ?: "Unknown Artist" else "Unknown Artist"
+            val album = if (albumColumn >= 0) cursor.getString(albumColumn) ?: "Unknown Album" else "Unknown Album"
+            val id = if (idColumn >= 0) cursor.getString(idColumn) ?: "UNKNOWN" else "UNKNOWN"
+            
+            return Music(id = id, title = title, album = album, artist = artist, path = finalPath, duration = duration, artUri = "")
+        }finally {
+            cursor?.close()
+        }
     }
 }
 

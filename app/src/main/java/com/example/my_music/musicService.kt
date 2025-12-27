@@ -68,12 +68,12 @@ class MusicService: Service(), AudioManager.OnAudioFocusChangeListener {
         val notification = NotificationCompat.Builder(baseContext, applicationClass.Companion.CHANNEL_ID)
             .setContentTitle(PlayerActivity.musicListPA[PlayerActivity.songPosition].title)
             .setContentText(PlayerActivity.musicListPA[PlayerActivity.songPosition].artist)
-            .setSmallIcon(R.drawable.music_ic)  
+            .setSmallIcon(R.drawable.music_ic)
             .setLargeIcon(image)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setContentIntent(contentIntent)  
+            .setContentIntent(contentIntent)
             .setOnlyAlertOnce(true)
             .addAction(R.drawable.prev_ic, "Previous", prevPendingIntent)
             .addAction(PlayPauseBtn, "Play", playPendingIntent)
@@ -94,7 +94,14 @@ class MusicService: Service(), AudioManager.OnAudioFocusChangeListener {
         try {
             if (musicService!!.mediaPlayer == null) musicService!!.mediaPlayer = MediaPlayer()
             else musicService!!.mediaPlayer!!.reset()
-            musicService!!.mediaPlayer!!.setDataSource(musicListPA[songPosition].path)
+            
+            val path = musicListPA[songPosition].path
+            if (path.startsWith("content://")) {
+                musicService!!.mediaPlayer!!.setDataSource(baseContext, android.net.Uri.parse(path))
+            } else {
+                musicService!!.mediaPlayer!!.setDataSource(path)
+            }
+            
             musicService!!.mediaPlayer!!.prepare()
             musicService!!.mediaPlayer!!.start()
             PlayerActivity.isPlaying = true
@@ -118,16 +125,16 @@ class MusicService: Service(), AudioManager.OnAudioFocusChangeListener {
     }
 
     override fun onAudioFocusChange(focusChange: Int) {
-        if(focusChange <= 0){
-            // Pause Music
+        if(focusChange < 0){
+            // Pause Music only on actual focus loss
             binding.playPauseBtn.setImageResource(R.drawable.play_ic)
             NowPlaying.binding.playPauseBtnNp.setIconResource(R.drawable.play_ic)
             showNotification(R.drawable.play_ic)
             isPlaying = false
             mediaPlayer!!.pause()
         }
-        else {
-            // Play Music
+        else if (focusChange > 0) {
+            // Play Music on focus gain
             binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
             NowPlaying.binding.playPauseBtnNp.setIconResource(R.drawable.pause_ic)
             showNotification(R.drawable.pause_ic)

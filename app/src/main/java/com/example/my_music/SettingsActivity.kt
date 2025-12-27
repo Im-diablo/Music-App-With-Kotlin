@@ -37,6 +37,24 @@ class SettingsActivity : AppCompatActivity() {
         binding.coolGreen.setOnClickListener { saveTheme(3) }
         binding.coolBlack.setOnClickListener { saveTheme(4) }
         binding.versionName.text = setVersion()
+        binding.sortBy.setOnClickListener {
+            val menuList = arrayOf("Recently Added", "Song Title", "File Size")
+            var currentSort = MainActivity.sortOrder
+            val builder = MaterialAlertDialogBuilder(this)
+            builder.setTitle("Sort By")
+                .setPositiveButton("GO"){_,_->
+                    val editor = getSharedPreferences("SORTING", MODE_PRIVATE).edit()
+                    editor.putInt("sortOrder", currentSort)
+                    editor.apply()
+
+                }
+                .setSingleChoiceItems(menuList, currentSort){_,which->
+                   currentSort = which
+                }
+            val customDialog = builder.create()
+            customDialog.show()
+            customDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.cool_green))
+        }
 
         
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
