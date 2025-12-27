@@ -43,15 +43,19 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             }
 
             selectionActivity -> {
+                val typedValue = android.util.TypedValue()
+                context.theme.resolveAttribute(R.attr.themeColor, typedValue, true)
+                val themeColor = typedValue.data
+
                 val isSelected = checkIfExists(musicList[position])
                 holder.root.setBackgroundColor(
-                    if (isSelected) ContextCompat.getColor(context, R.color.cool_pink)
+                    if (isSelected) themeColor
                     else ContextCompat.getColor(context, R.color.white)
                 )
 
                 holder.root.setOnClickListener {
                     if (addSong(musicList[position])) {
-                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.cool_pink))
+                        holder.root.setBackgroundColor(themeColor)
                     } else {
                         holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
                     }

@@ -21,7 +21,7 @@ class selectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySelectionBinding.inflate(layoutInflater)
-        setTheme(R.style.Theme_ForestGreen)
+        setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
         setContentView(binding.root)
         binding.selectionRV.setItemViewCacheSize(10)
         binding.selectionRV.setHasFixedSize(true)

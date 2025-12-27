@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/cool_pink"
+        android:background="?attr/themeColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -101,7 +101,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/sort_ic"
             android:padding="5dp"
-            android:tint="@color/cool_pink"/>
+            android:tint="?attr/themeColor"/>
 
     </LinearLayout>
 

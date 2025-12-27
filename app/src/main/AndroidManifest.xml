@@ -23,7 +23,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/blaze_music_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.My_Music">
+        android:theme="@style/Theme.Default">
         <activity
             android:name=".AboutActivity"
             android:exported="false"

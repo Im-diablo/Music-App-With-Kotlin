@@ -12,7 +12,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
         app:startIconDrawable="@drawable/playlist_ic"
-        app:startIconTint="@color/cool_pink"
+        app:startIconTint="?attr/themeColor"
         android:hint="@string/playlist_name"
         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox">
 
@@ -32,7 +32,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
         app:startIconDrawable="@drawable/playlist_ic"
-        app:startIconTint="@color/cool_pink"
+        app:startIconTint="?attr/themeColor"
         android:hint="@string/user_name"
         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox">
 

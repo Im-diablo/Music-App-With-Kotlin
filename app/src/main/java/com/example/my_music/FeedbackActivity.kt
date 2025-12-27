@@ -15,7 +15,7 @@ class FeedbackActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_MidnightPurple)
+        setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
         binding = ActivityFeedbackBinding.inflate(layoutInflater)
         setContentView(binding.root)
         

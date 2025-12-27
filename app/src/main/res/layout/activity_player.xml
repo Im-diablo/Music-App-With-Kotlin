@@ -36,7 +36,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/world"
-            android:textColor="@color/cool_pink"
+            android:textColor="?attr/themeColor"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="NestedWeights" />

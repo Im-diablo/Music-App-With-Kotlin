@@ -10,7 +10,7 @@
 
 ## ✨ Key Features
 
-*   **🎨 Beautiful & Dynamic UI**: Experience a sleek interface with multiple themes (Electric Blue, Cool Pink, Forest Green, and more) that adapts to your style.
+*   **🎨 Beautiful & Dynamic UI**: Experience a sleek interface with multiple themes (Cool Pink, Cool Blue, Cool Purple, Cool Green, Cool Black) that adapts to your style.
 *   **📱 Edge-to-Edge Design**: Fully immersive layout that looks great on modern Android devices, utilizing the full screen real estate.
 *   **📂 Local Music Scanning**: Automatically finds and organizes all audio files from your device storage.
 *   **⏯ Robust Playback Controls**:

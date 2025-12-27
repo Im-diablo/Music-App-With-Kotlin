@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center_vertical"
-        android:background="@color/purple_200"
+        android:background="?attr/themeColor"
         app:titleTextColor="@color/white"
         app:navigationIconTint="@color/white"/>
 

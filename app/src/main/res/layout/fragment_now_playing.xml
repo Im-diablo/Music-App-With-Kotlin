@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NowPlaying"
-    android:background="@color/cool_pink">
+    android:background="?attr/themeColor">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/songImageNP"
@@ -23,7 +23,7 @@
        android:layout_alignParentRight="true"
        app:icon="@drawable/next_ic"
        app:iconTint="@color/white"
-       android:backgroundTint="@color/cool_pink"
+       android:backgroundTint="?attr/themeColor"
        app:iconSize="40dp"
        android:layout_marginEnd="10dp"/>
 
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         app:icon="@drawable/play_ic"
         app:iconTint="@color/white"
-        android:backgroundTint="@color/cool_pink"
+        android:backgroundTint="?attr/themeColor"
         app:iconSize="40dp"
         android:layout_toStartOf="@id/nextBtnNp"
         android:layout_marginHorizontal="5dp" />
