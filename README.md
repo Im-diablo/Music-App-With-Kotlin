@@ -148,18 +148,6 @@ To get a local copy up and running follow these simple steps.
 
 ---
 
-## 📸 Screenshots
-
-<!-- Add your screenshots here -->
-<div align="center">
-  <img src="path/to/screenshot1.png" width="250" />
-  <img src="path/to/screenshot2.png" width="250" />
-</div>
-
-*(Note: Replace `path/to/screenshotX.png` with actual paths to your screenshot images after uploading them to your repo)*
-
----
-
 ## 🤝 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
