@@ -160,5 +160,5 @@ Contributions are what make the open source community such an amazing place to l
 
 
 <div align="center">
-    <b>Made with ❤️ by Blaze</b>
+    <b>Made with 💗 by Blaze</b>
 </div>
